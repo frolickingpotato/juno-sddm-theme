@@ -220,7 +220,7 @@ Rectangle {
 
         TextInput {
             id: passwordInput
-            width: parent.width*(config.realValue("passwordInputWidth") || 0.5)
+            width: 400
             height: 200/96*passwordFontSize
             font.pointSize: passwordFontSize
             font.bold: true
@@ -228,8 +228,8 @@ Rectangle {
             font.family: defaultFont
             anchors {
                 bottom: parent.bottom
-                bottomMargin: 40
-                horizontalCenter: parent.horizontalCenter
+                left: parent.left
+                margins: 30
             }
             echoMode: config.boolValue("passwordMask") ? TextInput.Password : null
             color: config.stringValue("passwordTextColor") || textColor
@@ -340,7 +340,78 @@ Rectangle {
                 sessionsCycleSelectNext();
             }
         }
+        Rectangle {
+            id: dateTime
+            visible: true
+            width: 500
+            height: 150
+            anchors {
+                right: parent.right
+                top: parent.top
+                margins: 30
+            }
+            border.width: config.stringValue("passwordInputBorderWidth")
+            border.color: config.stringValue("passwordInputBorderColor")
+            color: config.stringValue("passwordInputBackground")
+            radius: config.stringValue("passwordInputRadius")
 
+            Text {
+                id: dateLabel
+
+                function updateDate() {
+                    text = new Date().toLocaleDateString(Qt.locale(), config.DateFormat);
+                }
+
+                font {
+                    family: config.FontFamily
+                    pointSize: config.DateSize
+                    bold: true
+                }
+
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    top: parent.top
+                    topMargin: 5
+                }
+
+                renderType: Text.NativeRendering
+                color: config.passwordTextColor
+            }
+
+            Text {
+                id: timeLabel
+
+                function updateTime() {
+                    text = new Date().toLocaleTimeString(Qt.locale(), config.TimeFormat);
+                }
+
+                font {
+                    family: config.FontFamily
+                    pointSize: config.TimeSize
+                    bold: true
+                }
+
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: 5
+                }
+
+                renderType: Text.NativeRendering
+                color: config.passwordTextColor
+            }
+
+            Timer {
+                interval: 1000
+                repeat: true
+                running: true
+                
+                onTriggered: {
+                    timeLabel.updateTime();
+                    dateLabel.updateDate();
+                }
+            }
+        }
         Text {
             id: helpMessage
             visible: false
