@@ -227,7 +227,8 @@ Rectangle {
             font.letterSpacing: 20/96*passwordFontSize
             font.family: defaultFont
             anchors {
-                verticalCenter: parent.verticalCenter
+                bottom: parent.bottom
+                bottomMargin: 40
                 horizontalCenter: parent.horizontalCenter
             }
             echoMode: config.boolValue("passwordMask") ? TextInput.Password : null
